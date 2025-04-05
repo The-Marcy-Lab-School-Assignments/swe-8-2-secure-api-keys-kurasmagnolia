@@ -23,8 +23,27 @@ const serveStatic = express.static(pathToDistFolder);
 
 app.use(serveStatic);
 
+const baseUrl = 'https://api.giphy.com/v1/gifs';
+
 const serveTrendingGifs = async (req, res, next) => {
-  const url = `https://api.giphy.com/v1/gifs/trending?limit=3&rating=g&api_key=${process.env.API_KEY}`;
+  const url = `${baseUrl}/trending?limit=3&rating=g&api_key=${process.env.API_KEY}`;
+
+  try {
+    // This is pretty standard fetching logic
+    const gifsResponse = await fetch(url);
+    const gifsData = await gifsResponse.json();
+    // send the fetched data to the client
+    res.send(gifsData);
+  } catch (error) {
+    // or send an error. 503 means the service is unavailable
+    res.status(503).send(error);
+  }
+};
+
+const serveSearchedGifs = async (req, res, next) => {
+  let { query } = req.query;
+
+  const url = `${baseUrl}/search?limit=3&rating=g&api_key=${process.env.API_KEY}&q=${query}`;
 
   try {
     // This is pretty standard fetching logic

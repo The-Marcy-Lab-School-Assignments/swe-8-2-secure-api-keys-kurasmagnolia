@@ -11,4 +11,9 @@ export const getTrendingGifs = async () => {
 
   return [data, error];
 };
-export const getGifsBySearch = async (searchTerm) => {};
+export const getGifsBySearch = async (searchTerm) => {
+  const url = `/api/search?query=${searchTerm}`;
+  const [data, error] = await handleFetch(url);
+
+  return [data, error];
+};
