@@ -43,6 +43,7 @@ const serveTrendingGifs = async (req, res, next) => {
 //////////////////////////
 
 app.get('/api/gifs', serveTrendingGifs);
+app.get('/api/search', serveSearchedGifs);
 
 //////////////////////////
 // Listener
