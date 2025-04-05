@@ -5,11 +5,11 @@
 //////////////////////////
 const path = require('path');
 const express = require('express');
+dotenv.config();
 
 //////////////////////////
 // Constants
 //////////////////////////
-const API_KEY = 'kcs1s7c89aF0UOKZ3ojJtVobnKiFBKni';
 const port = 8080;
 const pathToDistFolder = path.join(__dirname, '../frontend/dist');
 const app = express();
@@ -23,7 +23,7 @@ const serveStatic = express.static(pathToDistFolder);
 app.use(serveStatic);
 
 const serveTrendingGifs = async (req, res, next) => {
-  const url = `https://api.giphy.com/v1/gifs/trending?limit=3&rating=g&api_key=${API_KEY}`;
+  const url = `https://api.giphy.com/v1/gifs/trending?limit=3&rating=g&api_key=${process.env.API_KEY}`;
 
   try {
     // This is pretty standard fetching logic
