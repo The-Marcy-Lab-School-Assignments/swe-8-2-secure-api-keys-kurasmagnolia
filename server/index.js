@@ -25,7 +25,7 @@ app.use(serveStatic);
 
 const baseUrl = 'https://api.giphy.com/v1/gifs';
 
-const serveTrendingGifs = async (req, res, next) => {
+const serveTrendingGifs = async (req, res) => {
   const url = `${baseUrl}/trending?limit=3&rating=g&api_key=${process.env.API_KEY}`;
 
   try {
@@ -40,10 +40,10 @@ const serveTrendingGifs = async (req, res, next) => {
   }
 };
 
-const serveSearchedGifs = async (req, res, next) => {
-  let { query } = req.query;
+const serveSearchedGifs = async (req, res) => {
+  let { search } = req.query;
 
-  const url = `${baseUrl}/search?limit=3&rating=g&api_key=${process.env.API_KEY}&q=${query}`;
+  const url = `${baseUrl}/search?limit=3&rating=g&api_key=${process.env.API_KEY}&q=${search}`;
 
   try {
     // This is pretty standard fetching logic
@@ -61,8 +61,13 @@ const serveSearchedGifs = async (req, res, next) => {
 // Endpoints
 //////////////////////////
 
-app.get('/api/gifs', serveTrendingGifs);
-app.get('/api/search', serveSearchedGifs);
+app.get('/api/gifs', (req, res, next) => {
+  if (req.query.search) {
+    return serveSearchedGifs(req, res, next);
+  } else {
+    return serveTrendingGifs(req, res, next);
+  }
+});
 
 //////////////////////////
 // Listener
